@@ -1,0 +1,126 @@
+---
+import { works, groups, featured } from '../data/works';
+import ProjectVisual from '../components/ProjectVisual.astro';
+import '../styles/global.css';
+const selected = featured.map(id => works.find(work => work.id === id)).filter((work): work is NonNullable<typeof work> => Boolean(work));
+const lanes = [
+  { title: 'Skills', subtitle: '把经验，变成方法。', description: '求职简历、旅行规划、投资研究、内容创作与复盘。把每次摸索里有用的部分留下来。', category: 'Skill', art: 'resume-skill' },
+  { title: 'Agents', subtitle: '把方法，连接起来。', description: '研究、规划、创作。探索让 AI 持续完成任务的工作方式。', category: 'Agent', art: 'blogger-agent' },
+  { title: 'Products', subtitle: '把想法，做成东西。', description: '旅行页面、简历工具、剪辑工作台，以及你正在看的这个网站。', category: 'Product', art: 'travel-os' }
+];
+const log = [
+  { title: '为什么做这个网站？', body: '做过的 Skill、Agent 和小产品需要一个共同的家。不只保留成品，也记录从想法到实现的过程。' }
+];
+const categories = [
+  { label: 'SKILLS', image: 'skills' },
+  { label: 'AGENTS', image: 'agents' },
+  { label: 'PRODUCTS', image: 'products' },
+  { label: 'VIDEOS', image: 'videos' },
+  { label: 'BUILD LOGS', image: 'build-logs' },
+];
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#171717" />
+    <meta name="description" content="Rolin AI Lab。用 AI 把想法变成可以使用的东西：Skills、Agents、Products、Videos，以及每一次尝试与升级。" />
+    <title>Rolin AI Lab — 想法，做出来</title>
+    <link rel="icon" href="/brand/rolin-hero.webp" type="image/webp" />
+  </head>
+  <body>
+    <a class="skip-link" href="#selected">跳到作品</a>
+    <div class="hero-shell" id="home">
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-media">
+          <img id="hero-image" src="/brand/rolin-hero.webp" width="1672" height="941" alt="Rolin 的黑发、黑框眼镜与黑色外套 IP 形象" fetchpriority="high" />
+          <canvas id="liquid-canvas" aria-hidden="true"></canvas>
+        </div>
+        <header class="hero-nav gutter">
+          <a class="brand" href="#home"><span class="pixel-mark" aria-hidden="true"><i></i><i></i><i></i></span>ROLIN<span class="brand-lab">AI LAB</span></a>
+          <nav class="desktop-nav" aria-label="主导航"><a href="#home">Home<sup>01</sup></a><a href="#selected">Works<sup>02</sup></a><a href="#lab">Lab<sup>03</sup></a><a href="#build-log">Build Log<sup>04</sup></a></nav>
+          <a class="profile-link" href="#about"><img src="/brand/rolin-hero.webp" alt="" width="56" height="56" /><span>Meet Rolin<small>AI Creator / Maker</small></span><span class="profile-arrow" aria-hidden="true">↗</span></a>
+          <button class="mobile-menu-button" aria-label="打开导航" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span></button>
+        </header>
+        <div class="hero-note"><p>我让 AI 帮我做了一堆<br />奇怪但有用的东西。<br /><span>这里记录它们如何发生。</span></p><a class="rule-link" href="#selected"><span>看看最近的作品</span><span aria-hidden="true">↗</span></a></div>
+        <div class="crosshairs" aria-hidden="true"><i>+</i><i>+</i><i>+</i><i>+</i></div>
+        <div class="hero-bottom gutter">
+          <div class="hero-index"><span>© 2026</span><div class="ticks" aria-hidden="true">{Array.from({ length: 12 }, (_, index) => <i style={`--tick:${index % 5}`}></i>)}</div><span>LAB / 01</span></div>
+          <div class="hero-wordmark"><p class="disciplines">01 / Skills<br />Agents<br />Products & Videos</p><h1 id="page-title" aria-label="Rolin AI Lab"><span>ROLIN</span><span class="wordmark-symbol" aria-hidden="true">✳</span></h1></div>
+        </div>
+      </section>
+    </div>
+    <nav id="mobile-menu" class="mobile-menu" aria-label="移动端导航" hidden><a href="#home">Home <small>01</small></a><a href="#selected">Works <small>02</small></a><a href="#lab">Lab <small>03</small></a><a href="#build-log">Build Log <small>04</small></a><a href="#about">About <small>05</small></a></nav>
+
+    <main id="main">
+      <section class="about-section section light" id="about">
+        <div class="section-label"><span>+ 01</span><span>(About the Lab)</span><span>ROLIN / AI</span></div>
+        <h2 class="scroll-copy about-copy"><span>我用 AI，</span><span>把想法做成可以使用的东西。</span><span>从 Skill、Agent 到小产品，</span><span>记录每一次尝试、失败和升级。</span></h2>
+        <div class="about-grid">
+          <figure class="portrait" data-reveal><img src="/brand/rolin-hero.webp" alt="Rolin AI Lab 人物主视觉" width="1672" height="941" loading="lazy" /><figcaption>Rolin / 一个人的 AI 实验室</figcaption></figure>
+          <div class="about-process"><div><span>(Idea)</span><p>一个自己想解决的问题。<br />从生活和创作中开始。</p></div><div><span>(Building)</span><p>和 AI 一起研究、制作、修改。<br />把每次尝试变成下一版的起点。</p></div><div><span>(Open)</span><p>让成果可以被看到，<br />让制作过程也有迹可循。</p></div><a class="rule-link" href="#build-log"><span>看看制作过程</span><span aria-hidden="true">↗</span></a></div>
+        </div>
+        <div class="ticker" aria-label="Skills、Agents、Products、Videos、Build Logs"><div class="ticker-track">{[0, 1].map(copy => <div class="ticker-copy" aria-hidden={copy === 1 ? 'true' : undefined}>{categories.map(category => <span><img src={`/brand/category-${category.image}.webp`} width="112" height="112" alt="" loading="lazy" decoding="async" /><span>{category.label}</span></span>)}</div>)}</div></div>
+      </section>
+
+      <section class="selected-section section light" id="selected">
+        <div class="section-label"><span>+ 02</span><span>(Selected Experiments)</span><span>{String(selected.length).padStart(2, '0')} / PROJECTS</span></div>
+        <div class="stack-layout">
+          <aside class="stack-side"><h2>最近，<br />在造什么。</h2><a class="rule-link" href="#directory"><span>全部作品</span><span aria-hidden="true">↗</span></a></aside>
+          <div class="stack-track">{selected.map((work, index) => <article class="stack-card" style={`--index:${index}`}>
+            <button class="project-tile" data-open={work.id} aria-label={`查看 ${work.name}`}>
+              <div class="visual-echo"><ProjectVisual id={work.id} image={work.cover} /></div><div class="visual-front"><ProjectVisual id={work.id} image={work.cover} /></div><span class="project-hover">查看作品 ↗</span>
+            </button>
+            <div class="work-caption"><span>0{index + 1}</span><div><h3>{work.name}</h3><p>{work.category}</p></div><span class="cover-label">{work.cover ? '作品封面' : 'IP 概念封面'}</span></div>
+          </article>)}</div>
+          <aside class="stack-side stack-right"><a class="mini-link" href="#directory"><img src="/brand/rolin-hero.webp" alt="" width="40" height="40" /><span>全部档案 ({works.length}) <span aria-hidden="true">↗</span></span></a></aside>
+        </div>
+      </section>
+
+      <section class="lab-section section dark" id="lab">
+        <div class="section-label"><span>+ 03</span><span>(Inside the Lab)</span><span>SKILL / AGENT / PRODUCT</span></div>
+        <h2 class="scroll-copy lab-copy"><span>方法可以复用，</span><span>任务可以连接，</span><span>想法可以变成作品。</span></h2>
+        <div class="lab-intro"><a class="rule-link" href="#directory"><span>探索实验档案</span><span aria-hidden="true">↗</span></a><span aria-hidden="true">+</span><span aria-hidden="true">+</span></div>
+        <div class="lab-rows">{lanes.map((lane, index) => <article class="lab-row" id={groups[index].id} data-reveal><span class="lab-number">0{index + 1}</span><a class="lab-art" href="#directory" data-category-link={lane.category} aria-label={`浏览 ${lane.title}`}><ProjectVisual id={lane.art} compact /></a><div class="lab-description"><h3>{lane.title}</h3><div><h4>{lane.subtitle}</h4><p>{lane.description}</p><a class="inline-link" href="#directory" data-category-link={lane.category}>查看档案 ↗</a></div></div></article>)}</div>
+        <details class="capability-tree"><summary>我的 AI 能力树 <span aria-hidden="true">+</span></summary><div class="tree-map"><div class="tree-root">AI</div><div class="tree-branches"><div>Agent<small>Research</small></div><div>Skill<small>Workflow</small></div><div>Product<small>Web</small></div></div><div class="tree-end">Content <span aria-hidden="true">↓</span> Video</div></div></details>
+      </section>
+
+      <section class="directory-section section light" id="directory">
+        <div class="section-label"><span>+ 04</span><span>(The Archive)</span><span>{works.length} / ENTRIES</span></div>
+        <div class="archive-heading"><h2>持续生长的<br />作品档案。</h2><label class="search-label"><span>搜索作品</span><input type="search" id="search" placeholder="名称或关键词" autocomplete="off" /></label></div>
+        <div class="archive-toolbar"><div class="filters" role="group" aria-label="作品类别">{[{ label: 'All', value: 'All' }, ...groups.map(group => ({ label: group.title, value: group.category }))].map((filter, index) => <button data-filter={filter.value} aria-pressed={index === 0 ? 'true' : 'false'}>{filter.label}<sup>{filter.value === 'All' ? works.length : works.filter(work => work.category === filter.value).length}</sup></button>)}</div><span id="result-count" role="status" aria-live="polite">{works.length} 个作品</span></div>
+        <div class="archive-list">{works.map((work, index) => <article class="archive-row" data-category={work.category} data-search={`${work.name} ${work.description}`}><span class="archive-index">{String(index + 1).padStart(2, '0')}</span><button class="archive-name" data-open={work.id}>{work.name}<span class="archive-purpose">{work.description}</span></button><span class="archive-category">{work.category}</span><span class="archive-status">{work.status !== '待整理' && <span class="status-dot">{work.status}</span>}</span><button class="archive-open" data-open={work.id} aria-label={`打开 ${work.name}`}>↗</button></article>)}</div>
+        <div class="empty-state" id="empty-state" hidden><p>没有匹配的作品。</p><button class="inline-link" id="clear-search">清除筛选 ↗</button></div>
+      </section>
+
+      <section class="videos-section section light" id="videos">
+        <div class="section-label"><span>+ 05</span><span>(Videos)</span><span>MAKING / IN PUBLIC</span></div>
+        <div class="videos-heading"><h2>做出来。<br />也讲出来。</h2><p>产品演示、实践过程、每次迭代。<br />视频与真实作品一起，慢慢补齐。</p></div>
+        <div class="video-channels">{['小红书', '抖音', '产品 Demo'].map((name, index) => <div><span>0{index + 1}</span><h3>{name}</h3><span>内容整理中</span></div>)}</div>
+      </section>
+
+      <section class="build-section section light" id="build-log">
+        <div class="section-label"><span>+ 06</span><span>(Build Logs)</span><span>ENTRY / 001</span></div>
+        <div class="log-layout"><div class="log-lead"><h2>这个网站，<br />也是我的作品。</h2><p>Rolin AI Lab / 从零开始</p>{works.some(work => work.id === 'ai-lab') && <button class="rule-link" data-open="ai-lab"><span>查看网站档案</span><span aria-hidden="true">↗</span></button>}</div><div class="log-entries">{log.map((entry, index) => <details open={index === 0}><summary><span class="entry-number">0{index + 1}</span><h3>{entry.title}</h3><span class="summary-symbol" aria-hidden="true">+</span></summary><div class="detail-content"><p>{entry.body}</p></div></details>)}</div></div>
+      </section>
+    </main>
+
+    <footer class="footer dark section">
+      <div class="footer-top"><div><p>下一次尝试，</p><h2>从一个好奇心开始。</h2><a class="rule-link" href="https://github.com/roldself/rolin-ai-lab" target="_blank" rel="noreferrer"><span>GitHub / rolin-ai-lab</span><span aria-hidden="true">↗</span></a></div><nav aria-label="页脚导航"><a href="#home">Home <sup>01</sup></a><a href="#selected">Works <sup>02</sup></a><a href="#lab">Lab <sup>03</sup></a><a href="#build-log">Build Log <sup>04</sup></a></nav></div>
+      <div class="footer-crosses" aria-hidden="true"><span>+</span><span>+</span><span>+</span></div>
+      <div class="footer-wordmark" aria-hidden="true"><span>ROLIN</span><span>✳</span></div><div class="footer-meta"><span>Rolin AI Lab</span><span>© 2026 / ALWAYS IN PROGRESS</span></div>
+    </footer>
+    <button class="motion-toggle" id="motion-toggle" aria-label="暂停动效" aria-pressed="false" title="暂停动效"><span class="pause-icon" aria-hidden="true"></span></button>
+
+    {works.map(work => <dialog id={`work-${work.id}`} class="work-dialog" aria-labelledby={`title-${work.id}`}><div class="dialog-header"><span>{work.category} / PROJECT FILE</span><button class="dialog-close" data-close aria-label="关闭作品详情" title="关闭">×</button></div><h2 id={`title-${work.id}`}>{work.name}</h2><p class="dialog-description">{work.description}</p>
+      <dl class="project-facts">{work.status !== '待整理' && <div><dt>状态</dt><dd>{work.status}</dd></div>}{work.version && <div><dt>版本</dt><dd>{work.version}</dd></div>}{work.technology && <div><dt>技术</dt><dd>{work.technology.join(' / ')}</dd></div>}</dl>
+      {work.capabilities && <div class="dialog-capabilities"><h3>{work.id === 'ai-lab' ? '本轮实现' : '能力方向'}</h3><ul>{work.capabilities.map(capability => <li>{capability}</li>)}</ul></div>}
+      {(work.cover || selected.some(item => item.id === work.id)) && <figure class="dialog-cover"><ProjectVisual id={work.id} image={work.cover} /><figcaption>{work.cover ? work.name : 'Rolin IP 概念封面，产品实景待补充。'}</figcaption></figure>}
+      {work.body && <p class="project-body">{work.body}</p>}
+      {work.screenshots?.map(shot => <figure class="project-screenshot"><img src={shot.src} alt={shot.caption || `${work.name} 作品截图`} loading="lazy" width="1600" height="1000" />{shot.caption && <figcaption>{shot.caption}</figcaption>}</figure>)}
+      {work.links?.length ? <div class="dialog-links">{work.links.map(link => <a class="rule-link" href={link.href} target={link.href.startsWith('http') ? '_blank' : undefined} rel={link.href.startsWith('http') ? 'noreferrer' : undefined}><span>{link.label}</span><span aria-hidden="true">↗</span></a>)}</div> : <p class="project-note">作品介绍正在整理，体验与下载入口将在确认后补充。</p>}
+    </dialog>)}
+    <script>import '../scripts/lab';</script>
+  </body>
+</html>

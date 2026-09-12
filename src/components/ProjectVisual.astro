@@ -1,0 +1,20 @@
+---
+interface Props { id: string; compact?: boolean; image?: string }
+const { id, compact = false, image } = Astro.props;
+const covers: Record<string, { title: string[]; line: string; crop: number[]; theme: string }> = {
+  'travel-os': { title: ['TRAVEL', 'OS.'], line: 'GO SOMEWHERE NEW', crop: [741, 632, 103, 193], theme: 'travel' },
+  'resume-skill': { title: ['YOUR STORY.', 'REWRITTEN.'], line: 'AI RESUME WORKFLOW', crop: [436, 641, 144, 178], theme: 'resume' },
+  remotion: { title: ['REMOTION', 'STUDIO.'], line: 'CODE. CUT. CREATE.', crop: [1019, 628, 106, 184], theme: 'remotion' },
+  'blogger-agent': { title: ['MAKE.', 'SHARE.'], line: 'AI BLOGGER AGENT', crop: [867, 649, 109, 174], theme: 'agent' }
+};
+const cover = covers[id] || covers['resume-skill'];
+const [x, y, width, height] = cover.crop;
+---
+{image ? <div class="project-art actual-cover"><img src={image} alt="" width="1600" height="1000" loading="lazy" /></div> : !covers[id] ? <div class="project-art actual-cover"><img src="/brand/category-products.webp" alt="" width="320" height="320" loading="lazy" /></div> : <div class:list={['project-art', cover.theme, { compact }]} aria-hidden="true">
+  <div class="art-no">ROLIN / EXPERIMENTS</div>
+  <div class="art-title">{cover.title.map(line => <span>{line}</span>)}</div>
+  <div class="art-character" style={`aspect-ratio:${width}/${height}`}>
+    <img src="/brand/rolin-character.webp" alt="" width="1536" height="1024" loading="lazy" decoding="async" style={`width:${1536 / width * 100}%;left:${-x / width * 100}%;top:${-y / height * 100}%`} />
+  </div>
+  <div class="art-bottom"><span>{cover.line}</span><span>↗</span></div>
+</div>}

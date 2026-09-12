@@ -1,0 +1,15 @@
+{
+  "scripts": {
+    "studio": "node studio/server.mjs",
+    "test:studio": "node --test studio/studio.test.mjs",
+    "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview"
+  },
+  "dependencies": {
+    "@astrojs/check": "latest",
+    "astro": "latest",
+    "typescript": "latest"
+  },
+  "devDependencies": {}
+}

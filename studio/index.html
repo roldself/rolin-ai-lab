@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="studio-token" content="__STUDIO_TOKEN__"><meta name="robots" content="noindex,nofollow">
+  <title>Rolin Studio / 作品工作台</title><link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="/">ROLIN <span>STUDIO</span></a><span class="local-status"><i></i>本地工作台</span><div class="top-actions"><button id="connect-button">连接 GitHub</button><button id="preview-button">预览网站 ↗</button><button id="publish-button">上传网站</button></div></header>
+  <div class="app-shell">
+    <aside class="sidebar"><div class="side-heading"><h1>作品</h1><button id="add-work" class="icon-button" title="新增作品" aria-label="新增作品">+</button></div><input id="work-search" type="search" aria-label="搜索作品" placeholder="搜索名称或关键词"><div class="side-count" id="work-count"></div><nav id="work-list" aria-label="作品列表"></nav><button class="guide-link" id="guide-button">首页各区域放什么？ ↗</button><div class="storage-note"><span>保存位置</span><strong>这台电脑</strong><small id="connection-state">GitHub 未连接</small></div></aside>
+    <main class="editor">
+      <div class="editor-heading"><div><p class="eyebrow" id="work-meta">PROJECT FILE</p><h2 id="editor-title">载入作品</h2></div><div class="save-actions"><span id="save-state">尚未修改</span><button id="delete-work" class="danger-button">删除作品</button><button class="primary" id="save-button">保存到本地</button></div></div>
+      <nav class="editor-tabs" aria-label="编辑步骤"><button data-tab="basics" aria-pressed="true">01 作品介绍</button><button data-tab="images" aria-pressed="false">02 截图与封面</button><button data-tab="downloads" aria-pressed="false">03 下载文件</button><button data-tab="placement" aria-pressed="false">04 展示位置</button></nav>
+      <form id="work-form">
+        <section data-panel="basics">
+          <div class="section-head"><h3>先说清楚，它是什么。</h3><span>文字 → 作品卡与详情</span></div>
+          <div class="form-grid"><label class="wide">作品名称<input name="name" required maxlength="120" placeholder="例如 AI Travel OS"></label><label>作品形态<select name="format"><option value="Skill">Skill / 可复用的方法</option><option value="Workflow">工作流 / 一套步骤</option><option value="Agent">Agent / 持续执行任务</option><option value="Product">产品 / 可直接使用的工具</option></select></label><label>当前状态<select name="status"><option value="待整理">尚未确认</option><option value="Idea">想法阶段</option><option value="Building">正在制作</option><option value="Testing">正在测试</option><option value="Published">已经发布</option><option value="Archived">已经归档</option></select></label><label class="wide">一句话介绍 <small>出现在作品卡和全部作品目录</small><textarea name="description" rows="3" maxlength="600" required placeholder="帮谁解决什么问题，最后得到什么结果？"></textarea></label><label class="wide">详细介绍 <small>点击作品后显示</small><textarea name="body" rows="6" maxlength="20000" placeholder="例如：适合谁使用、需要准备什么、主要步骤、输出结果。不要在这里放密码或 API Key。"></textarea></label><label>主要能力 <small>每行一项</small><textarea name="capabilities" rows="4" placeholder="路线规划&#10;时间轴生成&#10;旅行问答"></textarea></label><label>使用的技术 <small>每行一项，可留空</small><textarea name="technology" rows="4" placeholder="Astro&#10;Claude Code"></textarea></label><label>版本号<input name="version" maxlength="60" placeholder="例如 v1.0.0"></label></div>
+          <div class="section-head"><h3>作品入口</h3><button type="button" id="add-link">+ 添加链接</button></div><div id="link-fields"></div>
+        </section>
+        <section data-panel="images" hidden>
+          <div class="section-head"><h3>封面：让人一眼看懂作品。</h3><span>图片 → 首页重点卡</span></div>
+          <div class="cover-editor"><img id="cover-preview" alt="当前作品封面"><div><label class="upload-label">选择封面图片<input type="file" id="cover-file" accept="image/png,image/jpeg,image/webp"></label><button type="button" id="remove-cover" class="quiet-button">移除封面</button><p class="field-note">一张真实产品截图或成果图。建议横图，不需要加宣传边框。</p><p class="field-note">PNG / JPG / WebP · 原图最多 25 MiB · 自动缩小为网页图片</p></div></div>
+          <div class="section-head"><h3>截图：展示使用过程和结果。</h3><span>图＋说明 → 作品详情</span></div><div id="screenshot-list" class="screenshot-list"></div><label class="upload-label secondary-upload">+ 添加截图（最多 8 张）<input type="file" id="screenshot-files" multiple accept="image/png,image/jpeg,image/webp"></label>
+        </section>
+        <section data-panel="downloads" hidden>
+          <div class="section-head"><h3>别人下载后，能拿到什么？</h3><span>文件 → 下载按钮</span></div>
+          <div class="file-drop"><span class="file-symbol" aria-hidden="true">↓</span><div><strong>Skill 安装包、工作流文件、可运行产品包</strong><p>ZIP / JSON / Markdown 等。完整工作流可以先打成 ZIP；不要包含密钥和未脱敏资料。</p></div><label class="upload-label">选择文件<input type="file" id="download-files" multiple></label></div>
+          <div class="limits"><div><span>本地保存</span><strong>不会自动上传</strong></div><div><span>GitHub Releases</span><strong>单个文件小于 2 GiB</strong></div><div><span>Cloudflare Pages</span><strong>不接收这些下载包</strong></div></div>
+          <div id="download-list"></div>
+          <div class="release-form"><label>下载版本<input id="release-version" value="v1.0.0" maxlength="50"></label><label>这次更新了什么<textarea id="release-notes" rows="3" placeholder="首次发布：包含 Skill 文件、使用说明和示例。"></textarea></label><button type="button" id="upload-release">上传所选文件到 Release 草稿</button><p class="field-note">草稿上传也需要你的确认；公开发布另行确认，成功后自动补上下载链接。</p></div>
+        </section>
+        <section data-panel="placement" hidden>
+          <div class="section-head"><h3>位置由内容类型决定。</h3><span>不需要修改页面代码</span></div>
+          <div class="placement-row"><div><strong>全部作品目录</strong><p id="category-destination"></p></div><span class="pill">自动加入</span></div>
+          <div class="placement-row"><div><strong>首页「最近，在造什么」</strong><p>最多四个重点作品，其余作品仍在完整目录。</p></div><label class="toggle"><input type="checkbox" id="featured-check"><span>首页重点</span></label></div>
+          <label class="order-field">首页顺序<select id="featured-order"><option value="0">第 1 个</option><option value="1">第 2 个</option><option value="2">第 3 个</option><option value="3">第 4 个</option></select></label>
+          <div id="placement-checklist" class="checklist"></div>
+        </section>
+      </form>
+    </main>
+    <aside class="preview-rail"><div class="rail-heading"><h3>展示预览</h3><span>当前作品</span></div><div class="work-mini"><img id="mini-image" alt="作品卡预览"><div class="mini-meta"><span id="mini-category"></span><span id="mini-status"></span></div><h4 id="mini-name"></h4><p id="mini-description"></p><div id="mini-links"></div></div><div class="rail-heading"><h3>内容去向</h3></div><ol class="destination-list"><li><strong>作品卡</strong><span>封面＋名称＋一句话介绍</span></li><li><strong>作品详情</strong><span>详细文字＋截图＋能力</span></li><li><strong>体验 / 演示</strong><span>填写现有链接</span></li><li><strong>下载</strong><span>本地文件 → Release → 下载入口</span></li></ol><p class="local-reminder">所有编辑默认留在本机。</p></aside>
+  </div>
+  <div id="status-message" role="status" aria-live="polite" hidden></div>
+  <dialog id="connect-dialog"><div class="dialog-top"><h2>连接 GitHub</h2><button type="button" data-close class="icon-button" aria-label="关闭">×</button></div><p>目标仓库：<strong>roldself/rolin-ai-lab</strong></p><p>首次授权需要 GitHub 的细粒度访问凭据，仅选择这个仓库，Repository permissions 中将 Contents 设为 Read and write。</p><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noreferrer">在 GitHub 创建凭据 ↗</a><label>访问凭据<input type="password" id="github-token" autocomplete="off" spellcheck="false" placeholder="仅在本地工作台填写，不要发到聊天"></label><p class="field-note">只保存在当前本地服务的内存中，不写入代码、浏览器存储或 GitHub；关闭服务即清除。</p><div class="dialog-actions"><button id="disconnect">断开连接</button><button id="connect-confirm" class="primary">确认连接</button></div></dialog>
+  <dialog id="confirm-dialog"><div class="dialog-top"><h2 id="confirm-title"></h2><button type="button" data-close class="icon-button" aria-label="关闭">×</button></div><p id="confirm-description"></p><div id="confirm-files" class="confirm-files"></div><label class="consent"><input type="checkbox" id="confirm-check">我确认上传这些内容，并已检查隐私与密钥。</label><div class="dialog-actions"><button type="button" data-close>取消</button><button id="confirm-action" class="primary" disabled>确认</button></div></dialog>
+  <dialog id="guide-dialog"><div class="dialog-top"><h2>首页各区域放什么？</h2><button type="button" data-close class="icon-button" aria-label="关闭">×</button></div><div class="guide-table"><div><strong>人物首屏</strong><p>个人 IP 主视觉和一句定位。不是每个作品都放这里。</p></div><div><strong>五个分类小图</strong><p>固定的类型标识，不需要随着每个新作品更换。</p></div><div><strong>最近做的东西</strong><p>选择最多四个重点作品，用一张封面概括成果。</p></div><div><strong>Skills / Agents / Products</strong><p>工作流自动归入 Skills；作品按所选类型进入对应目录。</p></div><div><strong>作品详情</strong><p>详细文字、过程截图、每张图的说明和实际入口。</p></div><div><strong>Videos</strong><p>视频内容区目前待补充。第一版可先把演示链接加到相关作品中。</p></div><div><strong>Build Log</strong><p>当前保留本站的制作动机。更多日志单独扩展，不混入作品下载包。</p></div></div><h3>首次 Cloudflare 绑定</h3><p>在 Cloudflare Pages 选择此 GitHub 仓库，构建命令填 <code>npm run build</code>，输出目录填 <code>dist</code>。绑定后，工作台提交到 GitHub 才会触发部署；保存本地不会触发。</p><a href="https://dash.cloudflare.com/?to=/:account/workers-and-pages" target="_blank" rel="noreferrer">打开 Cloudflare ↗</a></dialog>
+  <script src="/app.js" defer></script>
+</body>
+</html>

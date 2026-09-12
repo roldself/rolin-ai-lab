@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "featured": [
+    "resume-skill",
+    "travel-skill",
+    "work-mty99pq4"
+  ],
+  "works": [
+    {
+      "id": "resume-skill",
+      "format": "Workflow",
+      "body": "重点不是替换简历模板，而是先把被忽略的工作经历挖出来：做过什么、承担了什么、解决了什么问题，以及有哪些可以核实的结果。\n\n这套工作流围绕经历提取、STAR 重构、JD 匹配和面试问题展开。适合有实际工作经验，却不知道如何组织和表达的人。准备材料可以从原简历、目标岗位说明和项目经历开始；缺少的事实需要补充，不能由 AI 编造业绩。",
+      "name": "AI Resume Workflow",
+      "category": "Skill",
+      "icon": "📝",
+      "description": "求职简历 Skill：让 AI 帮你挖掘工作经历，而不只是修改简历模板。",
+      "status": "待整理",
+      "capabilities": [
+        "经历提取",
+        "STAR 重构",
+        "JD 匹配",
+        "面试问题生成"
+      ],
+      "version": "",
+      "technology": [],
+      "links": [],
+      "screenshots": [
+        {
+          "src": "/media/c71c540b-2996-45e2-b7bb-9f33e89c0a7d.webp",
+          "caption": "简历截图"
+        },
+        {
+          "src": "/media/7fb8785e-6b65-4efb-804e-f99992570170.webp",
+          "caption": "面试题截图1"
+        },
+        {
+          "src": "/media/72b59942-e692-4b58-b3f0-5ccd94e13fc1.webp",
+          "caption": "面试题截图2"
+        }
+      ],
+      "cover": "/media/6d9ebffd-f59d-4c7d-9e03-5d66a5699084.webp"
+    },
+    {
+      "id": "travel-skill",
+      "body": "这项 Skill 关注旅行规划的方法：先整理目的地、天数、同行人、预算和偏好，再讨论路线与每天的安排。适合还没有明确行程、需要把零散想法整理成计划的阶段。\n\n它与 AI Travel OS 的定位不同：这里侧重可复用的规划方法，Travel OS 侧重把计划呈现为可视化旅行页面。",
+      "capabilities": [
+        "目的地与偏好整理",
+        "旅行时间安排",
+        "行程计划组织",
+        "网页呈现"
+      ],
+      "name": "旅行规划 Skill",
+      "category": "Skill",
+      "icon": "🗺️",
+      "description": "把目的地、偏好与时间安排，整理成一份旅行计划。",
+      "status": "Published",
+      "version": "",
+      "format": "Skill",
+      "technology": [],
+      "links": [
+        {
+          "label": "skill开源地址",
+          "href": "https://github.com/roldself/travel-copilot"
+        }
+      ],
+      "screenshots": [],
+      "cover": "/media/965f0675-c3ac-4f36-a24c-c7deb3ffb50e.webp"
+    },
+    {
+      "id": "ai-lab",
+      "body": "Rolin AI Lab 记录一个人用 AI 制作 Skill、Agent、小产品和视频的过程，网站本身也是其中一个作品。\n\n公开页面使用 Astro，包含作品目录、分类筛选、详情和水波主视觉。配套的本地作品工作台用于整理介绍、截图、文件和首页展示顺序。保存默认留在本机；上传网站、上传 Release 草稿与公开下载分别确认。\n\n目前仍在制作与验收中。本地数据和构建链路已有测试，真实 GitHub 上传及 Cloudflare 部署尚未完成账号联调。",
+      "name": "Rolin AI Lab",
+      "category": "Product",
+      "icon": "🧪",
+      "description": "这个网站本身也是一次 AI 协作实验：从空仓库开始，把作品和制作过程组织起来。",
+      "status": "Building",
+      "technology": [
+        "Astro",
+        "CSS",
+        "TypeScript",
+        "WebGL"
+      ],
+      "capabilities": [
+        "鼠标水波折射",
+        "滚动作品叠放",
+        "分类检索",
+        "作品详情"
+      ],
+      "links": [
+        {
+          "label": "项目仓库",
+          "href": "https://github.com/roldself/rolin-ai-lab"
+        },
+        {
+          "label": "制作过程",
+          "href": "#build-log"
+        }
+      ],
+      "version": "",
+      "format": "Product",
+      "screenshots": []
+    },
+    {
+      "id": "work-mty99pq4",
+      "name": "门店二维码",
+      "category": "Skill",
+      "status": "Published",
+      "icon": "",
+      "description": "1",
+      "body": "",
+      "version": "",
+      "format": "Workflow",
+      "capabilities": [],
+      "technology": [],
+      "links": [
+        {
+          "label": "展示页示例",
+          "href": "https://yufushuai.netlify.app/"
+        }
+      ],
+      "screenshots": [
+        {
+          "src": "/media/96329542-ca58-48be-b521-c14dd96a5f5b.webp",
+          "caption": "展示页1"
+        },
+        {
+          "src": "/media/4f6880de-fb28-4ff7-adfc-c0e2214f29d9.webp",
+          "caption": "展示页2"
+        },
+        {
+          "src": "/media/aa360e77-05ba-4f87-973d-5917a3eac816.webp",
+          "caption": "展示页3"
+        }
+      ],
+      "cover": "/media/5f92efd5-6ea4-4f42-8715-3becaf45ed18.webp"
+    }
+  ]
+}
