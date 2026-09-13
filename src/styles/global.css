@@ -94,7 +94,6 @@ nav sup { color: #b8b8b8; font-size: 10px; align-self: center; transform: transl
 .about-section { padding-top: 36px; }
 .scroll-copy { margin-block: 80px; font-size: 62px; line-height: 1.2; font-weight: 500; }
 .scroll-copy > span { display: block; opacity: var(--line-opacity, 1); }
-.about-copy > span:first-child { padding-left: 40%; }
 .about-grid { display: grid; grid-template-columns: minmax(180px, .65fr) minmax(0, 1.35fr); gap: 8%; padding-bottom: 80px; }
 .portrait { width: 250px; max-width: 100%; }
 .portrait img { width: 100%; height: 290px; object-fit: cover; object-position: 62% 45%; }
@@ -312,7 +311,6 @@ details[open] .summary-symbol { transform: rotate(45deg); }
   .disciplines { font-size: 12px; margin-bottom: 22px; line-height: 1.4; }
   .crosshairs { inset: 25% 10% 36% 10%; } .crosshairs i { font-size: 18px; } .crosshairs i:nth-child(3) { display: none; }
   .about-section { padding-top: 25px; } .scroll-copy { font-size: 30px; line-height: 1.4; margin-block: 44px; }
-  .about-copy > span:first-child { padding-left: 24%; }
   .about-grid { grid-template-columns: 1fr; gap: 30px; padding-bottom: 48px; } .portrait { width: 180px; margin: 0; }
   .portrait img { height: 210px; } .about-process { gap: 26px; } .about-process > div { font-size: 13px; grid-template-columns: .6fr 1.4fr; }
   .about-process .rule-link { width: 70%; } .ticker-copy > span { width: 238px; height: 116px; gap: 12px; padding: 16px; font-size: 13px; }
