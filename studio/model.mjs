@@ -33,6 +33,30 @@ export function validateContent(content) {
     if (work.links !== undefined && (!Array.isArray(work.links) || work.links.length > 30 || !work.links.every(link => text(link.label, 100, true) && safeLink(link.href)))) throw fail('链接需要名称和完整的 http/https 地址。');
   }
   if (!Array.isArray(content.featured) || content.featured.length > 4 || new Set(content.featured).size !== content.featured.length || !content.featured.every(id => ids.has(id))) throw fail('首页最多选择四个不同的作品。');
+  const articles = content.articles ?? [];
+  if (!Array.isArray(articles) || articles.length > 500) throw fail('图文最多 500 篇。');
+  const articleIds = new Set();
+  for (const article of articles) {
+    if (!validId(article.id) || articleIds.has(article.id)) throw fail('文章编号无效或重复。');
+    articleIds.add(article.id);
+    if (!text(article.title, 120, true) || !text(article.summary, 600) || !['Draft', 'Published'].includes(article.status)) throw fail('请检查文章标题、摘要和状态。');
+    if (!text(article.date, 10) || (article.date && (!/^\d{4}-\d{2}-\d{2}$/.test(article.date) || !Number.isFinite(Date.parse(article.date)) || new Date(article.date).toISOString().slice(0, 10) !== article.date))) throw fail('文章日期无效。');
+    if (article.cover && !mediaPath(article.cover)) throw fail('文章封面必须从工作台上传。');
+    if (!Array.isArray(article.blocks) || article.blocks.length > 200) throw fail('正文最多 200 个段落。');
+    for (const block of article.blocks) {
+      if (!['paragraph', 'heading', 'quote', 'image'].includes(block.type)) throw fail('正文类型无效。');
+      if (block.type === 'image' ? !mediaPath(block.src) || !text(block.caption, 300) : !text(block.text, 20000)) throw fail('正文或图片格式无效。');
+    }
+    if (article.status === 'Published' && !article.blocks.some(block => block.type === 'image' || block.text?.trim())) throw fail('展示文章前请添加正文。');
+  }
+  if (content.profile !== undefined) {
+    const profile = content.profile;
+    if (!profile || typeof profile !== 'object' || Array.isArray(profile)) throw fail('个人资料格式无效。');
+    for (const key of ['name', 'bio', 'email', 'wechat', 'xiaohongshu', 'douyin']) if (profile[key] !== undefined && !text(profile[key], key === 'bio' ? 1000 : 120)) throw fail('个人资料内容过长。');
+    if (profile.email && !/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(profile.email)) throw fail('请填写有效邮箱。');
+    for (const key of ['xiaohongshuUrl', 'douyinUrl']) if (profile[key] && (!safeLink(profile[key]) || !profile[key].startsWith('https://'))) throw fail('账号主页请填写完整 https 链接。');
+    if (profile.wechatQr && !mediaPath(profile.wechatQr)) throw fail('微信二维码必须从工作台上传。');
+  }
   return content;
 }
 

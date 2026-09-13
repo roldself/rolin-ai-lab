@@ -9,7 +9,10 @@ import { validateContent, safeLink, detectImage, deploymentFiles, RELEASE_LIMIT,
 import { githubClient } from './github.mjs';
 
 const project = resolve(import.meta.dirname, '..');
-const initial = JSON.parse(await readFile(join(project, 'src/data/content.json'), 'utf8'));
+const initial = { schemaVersion: 1, featured: ['travel-os'], works: [
+  { id: 'resume-skill', name: 'Resume fixture', description: 'Resume test', category: 'Skill', status: 'Idea' },
+  { id: 'travel-os', name: 'Travel fixture', description: 'Travel test', category: 'Product', status: 'Idea' },
+] };
 
 test('content contract: placement, links and uploaded media', () => {
   assert.equal(validateContent(structuredClone(initial)).works.length, initial.works.length);
@@ -18,6 +21,37 @@ test('content contract: placement, links and uploaded media', () => {
   const content = structuredClone(initial); content.featured = ['missing']; assert.throws(() => validateContent(content));
   content.featured = initial.featured; content.works[0].cover = '/../../private/file'; assert.throws(() => validateContent(content));
   assert.throws(() => detectImage(Buffer.from('<svg></svg>'), 'cover.png'));
+});
+
+test('articles and profile validate safely, without migrating existing works', () => {
+  const content = structuredClone(initial);
+  content.articles = [{ id:'article-test', title:'Test', summary:'', date:'2026-09-12', status:'Published', blocks:[{type:'paragraph',text:'Hello'}] }];
+  content.profile = { email:'hello@example.com', wechat:'rolin', xiaohongshuUrl:'https://example.com/creator' };
+  assert.doesNotThrow(() => validateContent(content));
+  for (const mutate of [c => c.articles[0].blocks = [], c => c.articles[0].date = '2026-02-31', c => c.articles[0].blocks = [{type:'html',text:'<script />'}], c => c.profile.wechatQr = '/etc/passwd', c => c.profile.douyinUrl = 'javascript:alert(1)', c => c.profile.email = 'bad']) {
+    const invalid = structuredClone(content); mutate(invalid); assert.throws(() => validateContent(invalid));
+  }
+});
+
+test('article and profile save/upload roundtrip with stale revision protection', async () => {
+  const { send, root } = await fixture();
+  let { json: state } = await send('/api/state');
+  state.content.articles = [{ id:'article-test', title:'Test article', summary:'', date:'', status:'Draft', blocks:[] }];
+  let response = await send('/api/save',{method:'POST',body:{content:state.content,revision:state.revision}});
+  assert.equal(response.status,200); state = response.json;
+  const image = await send('/api/upload?owner=article&work=article-test&kind=image&name=cover.png',{method:'POST',body:Buffer.from([137,80,78,71,13,10,26,10,0])});
+  assert.equal(image.status,200);
+  assert.equal((await send('/api/upload?owner=article&work=missing&kind=image&name=cover.png',{method:'POST',body:Buffer.from('x')})).status,400);
+  assert.equal((await send('/api/upload?owner=profile&work=profile&kind=download&name=file.zip',{method:'POST',body:Buffer.from('x')})).status,400);
+  state.content.articles[0].blocks = [{type:'image',src:image.json.src,caption:'Caption'}];
+  state.content.profile = { name:'Rolin', wechat:'contact-test', wechatQr:image.json.src };
+  const oldRevision = state.revision;
+  response = await send('/api/save',{method:'POST',body:{content:state.content,revision:oldRevision}});
+  assert.equal(response.status,200);
+  assert.equal((await send('/api/save',{method:'POST',body:{content:state.content,revision:oldRevision}})).status,409);
+  const disk = JSON.parse(await readFile(join(root,'src/data/content.json')));
+  assert.equal(disk.profile.wechat,'contact-test'); assert.deepEqual(disk.works,initial.works);
+  assert.equal((await send('/writing')).status,200); assert.equal((await send('/profile')).status,200);
 });
 
 async function fixture() {
@@ -135,6 +169,7 @@ test('release creation explicitly requests a draft, not public or latest', async
 test('full local roundtrip: saved work and uploaded picture appear in the built homepage', async () => {
   const { root, send } = await fixture();
   for (const path of ['src', 'public', 'package.json', 'astro.config.mjs', 'tsconfig.json']) await cp(join(project, path), join(root, path), { recursive: true });
+  await writeFile(join(root, 'src/data/content.json'), JSON.stringify(initial));
   await symlink(join(project, 'node_modules'), join(root, 'node_modules'), 'dir');
   const bytes = await readFile(join(project, 'public/brand/category-products.webp'));
   const uploaded = await send('/api/upload?work=travel-os&kind=image&name=cover.webp', { method: 'POST', body: bytes });
@@ -144,11 +179,21 @@ test('full local roundtrip: saved work and uploaded picture appear in the built 
   work.name = 'Studio Roundtrip Project'; work.body = 'Saved detail body from Studio.'; work.cover = uploaded.json.src;
   work.screenshots = [{ src: uploaded.json.src, caption: 'Saved screenshot caption' }];
   work.links = [{ label: 'Try the project', href: 'https://example.com/test' }];
+  state.content.articles = [
+    { id:'public-story',title:'Public story',summary:'Summary',date:'2026-09-12',status:'Published',cover:uploaded.json.src,blocks:[{type:'paragraph',text:'<script>alert(1)</script>'},{type:'image',src:uploaded.json.src,caption:'Article caption'}] },
+    { id:'draft-story',title:'Private draft title',summary:'',date:'',status:'Draft',blocks:[] },
+  ];
+  state.content.profile = { name:'Creator test',email:'hello@example.com',wechat:'wechat-test',xiaohongshu:'XHS test',xiaohongshuUrl:'https://example.com/profile' };
   assert.equal((await send('/api/save', { method: 'POST', body: { content: state.content, revision: state.revision } })).status, 200);
   const built = await send('/api/preview', { method: 'POST', body: {} });
   assert.equal(built.status, 200, built.text);
   const html = await readFile(join(root, 'dist/index.html'), 'utf8');
   for (const value of [work.name, work.body, uploaded.json.src, 'Saved screenshot caption', 'https://example.com/test']) assert(html.includes(value));
+  assert(html.includes('Public story')); assert(!html.includes('Private draft title')); assert(html.includes('hello@example.com'));
+  const articleHtml = await readFile(join(root,'dist/articles/public-story/index.html'),'utf8');
+  assert(articleHtml.includes('Article caption')); assert(!articleHtml.includes('<script>alert(1)</script>')); assert(articleHtml.includes('&lt;script'));
+  assert.equal((await send('/articles/public-story/')).status,200);
+  await assert.rejects(stat(join(root,'dist/articles/draft-story/index.html')));
   assert.equal((await send('/preview/')).status, 200);
 });
 

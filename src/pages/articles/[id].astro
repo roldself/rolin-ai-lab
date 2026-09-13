@@ -1,0 +1,17 @@
+---
+import { articles, profile } from '../../data/journal';
+import Contacts from '../../components/Contacts.astro';
+import Smoke from '../../components/Smoke.astro';
+import '../../styles/journal.css';
+export function getStaticPaths() { return articles.map(article => ({ params: { id: article.id }, props: { article } })); }
+const { article } = Astro.props;
+---
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>{article.title} · Rolin AI Lab</title><meta name="description" content={article.summary} /></head>
+<body class="reading-page">
+  <nav class="reading-nav" aria-label="文章导航"><a href="/#articles">← 图文手记</a><a href="/">ROLIN / AI LAB</a></nav>
+  <main class="reading-content"><article>
+    <header><p class="reading-meta">{profile.name || 'Rolin'} {article.date && <time datetime={article.date}>{article.date}</time>}</p><h1>{article.title}</h1>{article.summary && <p class="reading-summary">{article.summary}</p>}{article.cover && <img class="reading-cover" src={article.cover} alt={article.title} fetchpriority="high" />}</header>
+    <div class="reading-body">{article.blocks.map(block => block.type === 'image' ? <figure><img src={block.src} alt={block.caption || '文章配图'} loading="lazy" />{block.caption && <figcaption>{block.caption}</figcaption>}</figure> : block.type === 'heading' ? <h2>{block.text}</h2> : block.type === 'quote' ? <blockquote>{block.text}</blockquote> : <p>{block.text}</p>)}</div>
+  </article><a class="reading-back" href="/#articles">← 返回图文手记</a><Contacts /></main>
+<Smoke controls /></body></html>

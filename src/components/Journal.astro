@@ -1,0 +1,11 @@
+---
+import { articles } from '../data/journal';
+---
+<section class="section light journal-section" id="articles">
+  <div class="section-label"><span>+ JOURNAL</span><span>(图文手记)</span><span>{articles.length} / ARTICLES</span></div>
+  <div class="journal-heading"><h2>把过程，<br />写下来。</h2></div>
+  {articles.length ? <div class="journal-list">{articles.map(article => <a class="journal-entry" href={`/articles/${article.id}/`}>
+    {article.cover && <img src={article.cover} alt="" loading="lazy" width="720" height="450" />}
+    <div><small>{article.date || '手记'} / ROLIN</small><h3>{article.title}</h3><p>{article.summary}</p><span aria-hidden="true">↗</span></div>
+  </a>)}</div> : <p class="journal-empty">第一篇手记，正在酝酿。</p>}
+</section>

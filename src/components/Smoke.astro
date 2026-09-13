@@ -1,0 +1,11 @@
+---
+const { controls = false } = Astro.props;
+---
+<canvas id="smoke-canvas" aria-hidden="true"></canvas>
+{controls && <button id="smoke-toggle" aria-label="暂停动效" aria-pressed="false" title="暂停动效">Ⅱ</button>}
+<style>
+  #smoke-canvas { position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:90; }
+  #smoke-toggle { position:fixed; bottom:16px; left:16px; width:44px; height:44px; border:1px solid #ccc; border-radius:4px; background:#fff; color:#222; cursor:pointer; z-index:91; }
+  @media (hover:none), (pointer:coarse), (prefers-reduced-motion:reduce) { #smoke-canvas { display:none; } }
+</style>
+<script>import '../scripts/smoke';</script>

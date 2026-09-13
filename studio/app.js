@@ -11,6 +11,17 @@
   let busy = false;
   let noticeTimer;
   let confirmation;
+  const sections = document.createElement('nav');
+  sections.setAttribute('aria-label', '内容管理');
+  sections.style.cssText = 'display:flex;gap:20px;flex-wrap:wrap;padding:0 0 20px';
+  for (const [label, href] of [['作品', '/'], ['图文', '/writing'], ['个人资料', '/profile']]) {
+    const link = document.createElement('a'); link.textContent = label; link.href = href;
+    link.style.cssText = 'min-height:44px;display:inline-flex;align-items:center';
+    if (href === '/') link.setAttribute('aria-current', 'page');
+    link.addEventListener('click', event => { if (busy || (dirty && !confirm('放弃当前未保存的修改？'))) event.preventDefault(); });
+    sections.append(link);
+  }
+  $('.sidebar').prepend(sections);
   const icons = { Skill: 'skills', Agent: 'agents', Product: 'products' };
   const statusNames = { '待整理': '待确认', Idea: '想法', Building: '制作中', Testing: '测试中', Published: '已发布', Archived: '归档' };
   const current = () => state.content.works.find(work => work.id === currentId);

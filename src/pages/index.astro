@@ -1,6 +1,10 @@
 ---
 import { works, groups, featured } from '../data/works';
 import ProjectVisual from '../components/ProjectVisual.astro';
+import Journal from '../components/Journal.astro';
+import Contacts from '../components/Contacts.astro';
+import Smoke from '../components/Smoke.astro';
+import '../styles/journal.css';
 import '../styles/global.css';
 const selected = featured.map(id => works.find(work => work.id === id)).filter((work): work is NonNullable<typeof work> => Boolean(work));
 const lanes = [
@@ -35,11 +39,10 @@ const categories = [
       <section class="hero" aria-labelledby="page-title">
         <div class="hero-media">
           <img id="hero-image" src="/brand/rolin-hero.webp" width="1672" height="941" alt="Rolin 的黑发、黑框眼镜与黑色外套 IP 形象" fetchpriority="high" />
-          <canvas id="liquid-canvas" aria-hidden="true"></canvas>
         </div>
         <header class="hero-nav gutter">
           <a class="brand" href="#home"><span class="pixel-mark" aria-hidden="true"><i></i><i></i><i></i></span>ROLIN<span class="brand-lab">AI LAB</span></a>
-          <nav class="desktop-nav" aria-label="主导航"><a href="#home">Home<sup>01</sup></a><a href="#selected">Works<sup>02</sup></a><a href="#lab">Lab<sup>03</sup></a><a href="#build-log">Build Log<sup>04</sup></a></nav>
+          <nav class="desktop-nav" aria-label="主导航"><a href="#home">Home<sup>01</sup></a><a href="#selected">Works<sup>02</sup></a><a href="#lab">Lab<sup>03</sup></a><a href="#articles">图文<sup>04</sup></a><a href="#build-log">Build Log<sup>05</sup></a></nav>
           <a class="profile-link" href="#about"><img src="/brand/rolin-hero.webp" alt="" width="56" height="56" /><span>Meet Rolin<small>AI Creator / Maker</small></span><span class="profile-arrow" aria-hidden="true">↗</span></a>
           <button class="mobile-menu-button" aria-label="打开导航" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span></button>
         </header>
@@ -51,7 +54,7 @@ const categories = [
         </div>
       </section>
     </div>
-    <nav id="mobile-menu" class="mobile-menu" aria-label="移动端导航" hidden><a href="#home">Home <small>01</small></a><a href="#selected">Works <small>02</small></a><a href="#lab">Lab <small>03</small></a><a href="#build-log">Build Log <small>04</small></a><a href="#about">About <small>05</small></a></nav>
+    <nav id="mobile-menu" class="mobile-menu" aria-label="移动端导航" hidden><a href="#home">Home <small>01</small></a><a href="#selected">Works <small>02</small></a><a href="#lab">Lab <small>03</small></a><a href="#articles">图文 <small>04</small></a><a href="#build-log">Build Log <small>05</small></a><a href="#contact">联系我 <small>06</small></a></nav>
 
     <main id="main">
       <section class="about-section section light" id="about">
@@ -94,6 +97,7 @@ const categories = [
         <div class="empty-state" id="empty-state" hidden><p>没有匹配的作品。</p><button class="inline-link" id="clear-search">清除筛选 ↗</button></div>
       </section>
 
+      <Journal />
       <section class="videos-section section light" id="videos">
         <div class="section-label"><span>+ 05</span><span>(Videos)</span><span>MAKING / IN PUBLIC</span></div>
         <div class="videos-heading"><h2>做出来。<br />也讲出来。</h2><p>产品演示、实践过程、每次迭代。<br />视频与真实作品一起，慢慢补齐。</p></div>
@@ -108,6 +112,8 @@ const categories = [
 
     <footer class="footer dark section">
       <div class="footer-top"><div><p>下一次尝试，</p><h2>从一个好奇心开始。</h2><a class="rule-link" href="https://github.com/roldself/rolin-ai-lab" target="_blank" rel="noreferrer"><span>GitHub / rolin-ai-lab</span><span aria-hidden="true">↗</span></a></div><nav aria-label="页脚导航"><a href="#home">Home <sup>01</sup></a><a href="#selected">Works <sup>02</sup></a><a href="#lab">Lab <sup>03</sup></a><a href="#build-log">Build Log <sup>04</sup></a></nav></div>
+      <a class="rule-link" href="#articles">图文手记 ↗</a>
+      <Contacts />
       <div class="footer-crosses" aria-hidden="true"><span>+</span><span>+</span><span>+</span></div>
       <div class="footer-wordmark" aria-hidden="true"><span>ROLIN</span><span>✳</span></div><div class="footer-meta"><span>Rolin AI Lab</span><span>© 2026 / ALWAYS IN PROGRESS</span></div>
     </footer>
@@ -121,6 +127,7 @@ const categories = [
       {work.screenshots?.map(shot => <figure class="project-screenshot"><img src={shot.src} alt={shot.caption || `${work.name} 作品截图`} loading="lazy" width="1600" height="1000" />{shot.caption && <figcaption>{shot.caption}</figcaption>}</figure>)}
       {work.links?.length ? <div class="dialog-links">{work.links.map(link => <a class="rule-link" href={link.href} target={link.href.startsWith('http') ? '_blank' : undefined} rel={link.href.startsWith('http') ? 'noreferrer' : undefined}><span>{link.label}</span><span aria-hidden="true">↗</span></a>)}</div> : <p class="project-note">作品介绍正在整理，体验与下载入口将在确认后补充。</p>}
     </dialog>)}
+    <Smoke />
     <script>import '../scripts/lab';</script>
   </body>
 </html>

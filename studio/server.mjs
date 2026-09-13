@@ -39,6 +39,10 @@ export function createStudio(root, port = 4380) {
   };
   async function saveContent(content) {
     validateContent(content);
+    const articleImages = (content.articles || []).flatMap(article => [article.cover, ...article.blocks.filter(block => block.type === 'image').map(block => block.src)]);
+    for (const path of [...articleImages, content.profile?.wechatQr].filter(Boolean)) {
+      if (!(await stat(join(root, 'public', path))).isFile()) throw fail('图文或二维码图片不存在，请重新上传。');
+    }
     for (const work of content.works) for (const path of [work.cover, ...(work.screenshots || []).map(shot => shot.src)].filter(Boolean)) {
       if (!(await stat(join(root, 'public', path))).isFile()) throw fail('关联图片不存在，请重新上传。');
     }
@@ -55,8 +59,11 @@ export function createStudio(root, port = 4380) {
   function json(res, value, status = 200) { res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8' }); res.end(JSON.stringify(value)); }
   async function upload(req, url) {
     const workId = url.searchParams.get('work');
-    if (!validId(workId) || !(await readContent()).works.some(work => work.id === workId)) throw fail('先保存作品，再添加素材。');
     const kind = url.searchParams.get('kind');
+    const content = await readContent();
+    const owner = url.searchParams.get('owner') || 'work';
+    const exists = owner === 'profile' ? workId === 'profile' : owner === 'article' ? (content.articles || []).some(article => article.id === workId) : owner === 'work' && content.works.some(work => work.id === workId);
+    if (!validId(workId) || !exists || (owner !== 'work' && kind !== 'image')) throw fail('先保存内容，再添加图片。');
     if (!['image', 'download'].includes(kind)) throw fail('素材类型不正确。');
     const filename = basename(url.searchParams.get('name') || '').replace(/[\x00-\x1f/\\]/g, '').slice(0, 160);
     if (!filename || filename.startsWith('.')) throw fail('文件名无效。');
@@ -109,6 +116,16 @@ export function createStudio(root, port = 4380) {
       if (req.method === 'GET' && url.pathname === '/') {
         const html = (await readFile(join(root, 'studio/index.html'), 'utf8')).replace('__STUDIO_TOKEN__', secret);
         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' }); res.end(html); return;
+      }
+      if (req.method === 'GET' && ['/writing', '/profile'].includes(url.pathname)) {
+        const html = (await readFile(join(root, 'studio/writing.html'), 'utf8')).replace('__STUDIO_TOKEN__', secret);
+        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' }); res.end(html); return;
+      }
+      if (req.method === 'GET' && ['/writing.js', '/writing.css'].includes(url.pathname)) return await staticFile(res, url.pathname.slice(1), join(root, 'studio'));
+      if (req.method === 'GET' && /^\/articles\/[a-z0-9-]+\/?$/.test(url.pathname)) {
+        const html = await readFile(join(root, 'dist', url.pathname.slice(1).replace(/\/$/, ''), 'index.html'), 'utf8');
+        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' });
+        res.end(html.replaceAll('href="/#articles"', 'href="/preview/#articles"').replaceAll('href="/"', 'href="/preview/"')); return;
       }
       if (req.method === 'GET' && ['/app.js', '/style.css'].includes(url.pathname)) return await staticFile(res, url.pathname.slice(1), join(root, 'studio'));
       if (req.method === 'GET' && /^\/(brand|media)\//.test(url.pathname)) return await staticFile(res, decodeURIComponent(url.pathname.slice(1)), join(root, 'public'));

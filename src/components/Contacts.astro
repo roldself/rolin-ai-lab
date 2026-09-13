@@ -1,0 +1,12 @@
+---
+import { profile } from '../data/journal';
+const socials = [{ label: '小红书', name: profile.xiaohongshu, href: profile.xiaohongshuUrl }, { label: '抖音', name: profile.douyin, href: profile.douyinUrl }];
+---
+<section class="contact-section" id="contact" aria-label="联系 Rolin">
+  <div class="contact-intro"><p>{profile.name || 'Rolin'} / CONNECT</p>{profile.bio && <p>{profile.bio}</p>}</div>
+  <div class="contact-links">
+    {profile.email && <a href={`mailto:${profile.email}`}><small>邮件联系</small><span>{profile.email} ↗</span></a>}
+    {socials.filter(item => item.name || item.href).map(item => item.href ? <a href={item.href} target="_blank" rel="noreferrer"><small>{item.label}</small><span>{item.name || '访问主页'} ↗</span></a> : <div><small>{item.label}</small><span>{item.name}</span></div>)}
+    {(profile.wechat || profile.wechatQr) && <details><summary>微信{profile.wechat ? ` · ${profile.wechat}` : ''}</summary>{profile.wechatQr && <img src={profile.wechatQr} alt="Rolin 微信联系二维码" width="220" height="220" loading="lazy" />}</details>}
+  </div>
+</section>

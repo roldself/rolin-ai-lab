@@ -1,6 +1,6 @@
-import { createWaterRipple } from './water-ripple';
 
 const root = document.documentElement;
+export {};
 const tokens = getComputedStyle(root);
 const motion = {
   fast: parseFloat(tokens.getPropertyValue('--motion-fast')),
@@ -8,22 +8,17 @@ const motion = {
   ease: tokens.getPropertyValue('--ease').trim(),
 };
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
 const motionButton = document.querySelector<HTMLButtonElement>('#motion-toggle')!;
 let paused = false;
 const motionEnabled = () => !reduced.matches && !paused;
 
 const hero = document.querySelector<HTMLElement>('.hero')!;
-const heroImage = document.querySelector<HTMLImageElement>('#hero-image')!;
-const canvas = document.querySelector<HTMLCanvasElement>('#liquid-canvas')!;
 let heroVisible = true;
-const resetLiquid = createWaterRipple(hero, heroImage, canvas, () => motionEnabled() && finePointer.matches && heroVisible);
 
 const heroObserver = new IntersectionObserver(entries => {
   heroVisible = entries[0].isIntersecting;
   hero.inert = !heroVisible;
   hero.classList.toggle('offscreen', !heroVisible);
-  if (!heroVisible) resetLiquid();
 });
 heroObserver.observe(document.querySelector('.hero-shell')!);
 
@@ -77,14 +72,12 @@ function applyMotionPreference() {
   const label = reduced.matches ? '已跟随系统减少动效' : paused ? '开启动效' : '暂停动效';
   motionButton.setAttribute('aria-label', label);
   motionButton.title = label;
-  resetLiquid();
   requestScrollFrame();
 }
 motionButton.addEventListener('click', () => { paused = !paused; applyMotionPreference(); });
 reduced.addEventListener('change', applyMotionPreference);
-finePointer.addEventListener('change', resetLiquid);
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden) { resetLiquid(); cancelAnimationFrame(scrollFrame); scrollFrame = 0; }
+  if (document.hidden) { cancelAnimationFrame(scrollFrame); scrollFrame = 0; }
   else requestScrollFrame();
 });
 applyMotionPreference();
