@@ -95,7 +95,7 @@ nav sup { color: #b8b8b8; font-size: 10px; align-self: center; transform: transl
 .scroll-copy { margin-block: 80px; font-size: 62px; line-height: 1.2; font-weight: 500; }
 .scroll-copy > span { display: block; opacity: var(--line-opacity, 1); }
 .about-copy > span:first-child { padding-left: 40%; }
-.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20%; padding-bottom: 80px; }
+.about-grid { display: grid; grid-template-columns: minmax(180px, .65fr) minmax(0, 1.35fr); gap: 8%; padding-bottom: 80px; }
 .portrait { width: 250px; max-width: 100%; }
 .portrait img { width: 100%; height: 290px; object-fit: cover; object-position: 62% 45%; }
 .portrait figcaption { margin-top: 8px; color: var(--muted); font-size: 11px; }

@@ -1,12 +1,27 @@
 ---
 import { profile } from '../data/journal';
-const socials = [{ label: '小红书', name: profile.xiaohongshu, href: profile.xiaohongshuUrl }, { label: '抖音', name: profile.douyin, href: profile.douyinUrl }];
+interface Props { about?: boolean }
+const { about = false } = Astro.props;
+const socials = [{ kind: 'red', label: '小红书', name: profile.xiaohongshu, href: profile.xiaohongshuUrl }, { kind: 'douyin', label: '抖音', name: profile.douyin, href: profile.douyinUrl }];
 ---
+{about ? <div class="about-profile">
+  <p class="profile-eyebrow">MEET / {profile.name || 'Rolin'}</p>
+  <div class="profile-bio">{profile.bio?.split(/\n+/).filter(Boolean).map(paragraph => <p>{paragraph}</p>)}</div>
+  <div class="profile-socials" aria-label="社交账号">{socials.filter(item => item.name || item.href).map(item => {
+    const Tag = item.href ? 'a' : 'div';
+    return <Tag class="account-card" href={item.href || undefined} target={item.href ? '_blank' : undefined} rel={item.href ? 'noreferrer' : undefined}>
+      <span class={`contact-icon contact-icon--${item.kind}`} aria-hidden="true">{item.kind === 'red' ? '小红书' : '♪'}</span>
+      <span class="account-copy"><small>{item.label}</small><strong>{item.name || '访问主页'}</strong></span>
+      {item.href && <span class="account-arrow" aria-hidden="true">↗</span>}
+    </Tag>;
+  })}</div>
+  <a class="rule-link" href="#build-log"><span>看看制作过程</span><span aria-hidden="true">↗</span></a>
+</div> :
 <section class="contact-section" id="contact" aria-label="联系 Rolin">
-  <div class="contact-intro"><p>{profile.name || 'Rolin'} / CONNECT</p>{profile.bio && <p>{profile.bio}</p>}</div>
+  <div class="contact-intro"><p>{profile.name || 'Rolin'} / CONNECT</p><h3>聊聊你的想法。</h3></div>
   <div class="contact-links">
-    {profile.email && <a href={`mailto:${profile.email}`}><small>邮件联系</small><span>{profile.email} ↗</span></a>}
-    {socials.filter(item => item.name || item.href).map(item => item.href ? <a href={item.href} target="_blank" rel="noreferrer"><small>{item.label}</small><span>{item.name || '访问主页'} ↗</span></a> : <div><small>{item.label}</small><span>{item.name}</span></div>)}
-    {(profile.wechat || profile.wechatQr) && <details><summary>微信{profile.wechat ? ` · ${profile.wechat}` : ''}</summary>{profile.wechatQr && <img src={profile.wechatQr} alt="Rolin 微信联系二维码" width="220" height="220" loading="lazy" />}</details>}
+    {profile.email && <a class="account-card" href={`mailto:${profile.email}`}><span class="contact-icon contact-icon--mail" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg></span><span class="account-copy"><small>邮件联系</small><strong>{profile.email}</strong></span><span class="account-arrow" aria-hidden="true">↗</span></a>}
+    {(profile.wechat || profile.wechatQr) && <details class="wechat-card" open={!profile.wechatQr}><summary class="account-card"><span class="contact-icon contact-icon--wechat" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" /></svg></span><span class="account-copy"><small>微信联系</small><strong>{profile.wechat || '微信二维码'}</strong></span><span class="account-arrow" aria-hidden="true">+</span></summary>{profile.wechatQr ? <img src={profile.wechatQr} alt="Rolin 微信联系二维码" width="220" height="220" loading="lazy" /> : <p class="wechat-note">{profile.wechat}</p>}</details>}
   </div>
 </section>
+}

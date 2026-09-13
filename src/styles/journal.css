@@ -10,13 +10,37 @@
 .journal-entry:focus-visible, .reading-page a:focus-visible { outline: 2px solid #d64022; outline-offset: 5px; }
 .journal-empty { padding: 30px 0; color: #727272; }
 .contact-section { border-top: 1px solid currentColor; padding: 36px 0; margin-top: 48px; }
-.contact-intro { max-width: 640px; line-height: 1.8; white-space: pre-wrap; overflow-wrap: anywhere; }
-.contact-links { display: flex; gap: 28px; flex-wrap: wrap; margin-top: 24px; }
-.contact-links > * { min-width: 140px; max-width: 100%; overflow-wrap: anywhere; }
-.contact-links a { color: inherit; text-decoration: none; min-height: 44px; }
-.contact-links small { display: block; opacity: .65; margin-bottom: 8px; }
-.contact-links summary { cursor: pointer; min-height: 44px; }
-.contact-links img { display: block; max-width: 100%; height: auto; margin-top: 14px; }
+.contact-intro { line-height: 1.8; overflow-wrap: anywhere; }
+.contact-intro p, .profile-eyebrow { font-size: 12px; font-weight: 500; }
+.contact-intro h3 { font-size: 28px; font-weight: 500; margin: 12px 0 0; }
+.contact-links, .profile-socials { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 28px; align-items: start; }
+.about-profile { min-width: 0; }
+.profile-bio { font-size: 17px; line-height: 1.9; color: #606060; overflow-wrap: anywhere; }
+.profile-bio p { margin: 18px 0; }
+.profile-bio p:first-child { color: #202020; font-size: 22px; font-weight: 500; line-height: 1.6; }
+.about-profile .rule-link { margin: 28px 0 0 auto; max-width: 220px; }
+.account-card { display: flex; align-items: center; gap: 14px; min-width: 0; min-height: 110px; padding: 22px; border: 1px solid #dcdcdc; border-radius: 6px; background: #f7f7f7; color: inherit; text-decoration: none; transition: transform var(--motion-normal,280ms), border-color var(--motion-normal,280ms), background var(--motion-normal,280ms); }
+.account-copy { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.account-copy small { display: block; font-size: 12px; opacity: .7; margin-bottom: 8px; }
+.account-copy strong { display: block; font-size: 17px; font-weight: 500; line-height: 1.5; }
+.contact-icon { display: grid; place-items: center; width: 48px; height: 48px; flex: 0 0 48px; border-radius: 6px; }
+.contact-icon--red { background: #e92e45; color: white; font-size: 12px; font-weight: 700; }
+.contact-icon--douyin { background: #171717; color: white; font-size: 34px; text-shadow: -2px 0 #38d8d0, 2px 1px #ed375c; }
+.contact-icon--mail { background: #f5ddd5; color: #a3311b; }
+.contact-icon--wechat { background: #d7efdd; color: #216c37; }
+.account-arrow { flex: 0 0 20px; font-size: 23px; text-align: right; }
+.wechat-card { border: 1px solid #dcdcdc; border-radius: 6px; overflow: hidden; background: #f7f7f7; }
+.wechat-card summary { cursor: pointer; list-style: none; border: 0; border-radius: 0; }
+.wechat-card summary::-webkit-details-marker { display: none; }
+.wechat-card[open] .account-arrow { transform: rotate(45deg); }
+.wechat-card img { display: block; width: 220px; max-width: calc(100% - 44px); height: auto; margin: 0 22px 22px; border-radius: 4px; }
+.wechat-note { margin: 0 22px 22px; overflow-wrap: anywhere; }
+.dark .contact-links .account-card, .dark .wechat-card { background: #202020; border-color: #414141; color: #f5f5f5; }
+.account-card:focus-visible { outline: 2px solid #d64022; outline-offset: 4px; }
+@media(hover:hover) { a.account-card:hover, .wechat-card summary:hover { transform: translateY(-2px); border-color: #929292; background: #ededed; } .dark a.account-card:hover, .dark .wechat-card summary:hover { background: #2b2b2b; } }
+@media(max-width:1100px) { .profile-socials { grid-template-columns: 1fr; } }
+@media(max-width:700px) { .contact-links { grid-template-columns: 1fr; } .profile-bio { font-size: 16px; } .profile-bio p:first-child { font-size: 20px; } .account-card { min-height: 100px; padding: 18px; } .account-copy strong { font-size: 16px; } }
+@media(prefers-reduced-motion:reduce) { .account-card { transition: none; transform: none !important; } }
 .reading-page { margin: 0; background: #fff; color: #202020; font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; letter-spacing: 0; }
 .reading-page * { box-sizing: border-box; }
 .reading-nav { max-width: 1160px; padding: 26px 24px; margin: auto; display: flex; justify-content: space-between; gap: 20px; border-bottom: 1px solid #ddd; font-size: 13px; }
