@@ -230,6 +230,9 @@ export function createStudio(root, port = 4380) {
             const work = content.works.find(work => work.id === asset.workId);
             if (!work) continue;
             work.links ||= [];
+            const previousUrl = asset.downloadUrl;
+            asset.downloadUrl = `https://github.com/${REPO}/releases/download/${encodeURIComponent(remote.tag_name)}/${encodeURIComponent(asset.name)}`;
+            if (previousUrl !== asset.downloadUrl) work.links = work.links.filter(link => link.href !== previousUrl);
             if (!work.links.some(link => link.href === asset.downloadUrl)) work.links.push({ label: `下载 ${asset.originalName}`.slice(0, 100), href: asset.downloadUrl });
             asset.status = 'published';
           }

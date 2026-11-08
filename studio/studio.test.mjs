@@ -213,7 +213,7 @@ test('full release flow: explicit draft upload, separate public confirmation, do
     } else if (new URL(url).hostname === 'uploads.github.com') {
       let size = 0; for await (const chunk of options.body) size += chunk.length;
       changes.push('upload');
-      asset = { id: 456, state: 'uploaded', size, browser_download_url: 'https://github.com/roldself/rolin-ai-lab/releases/download/travel-os-v1.0.0/workflow.zip' }; result = asset;
+      asset = { id: 456, state: 'uploaded', size, browser_download_url: 'https://github.com/roldself/rolin-ai-lab/releases/download/untagged-draft/workflow.zip' }; result = asset;
     } else if (path.endsWith('/releases/123')) {
       if (options.method === 'PATCH') { assert.equal(JSON.parse(options.body).draft, false); changes.push('publish'); published = true; }
       result = { id: 123, draft: !published, tag_name: 'travel-os-v1.0.0', assets: [asset] };
@@ -233,7 +233,10 @@ test('full release flow: explicit draft upload, separate public confirmation, do
     const result = await send('/api/release/publish', { method: 'POST', body: { releaseId: 123, confirm: true } }); assert.equal(result.status, 200, result.text);
     assert.deepEqual(changes, ['draft', 'upload', 'publish']);
     const content = JSON.parse(await readFile(join(root, 'src/data/content.json')));
-    assert(content.works.find(work => work.id === 'travel-os').links.some(link => link.href === asset.browser_download_url));
+    const canonicalUrl = 'https://github.com/roldself/rolin-ai-lab/releases/download/travel-os-v1.0.0/workflow.zip';
+    assert(content.works.find(work => work.id === 'travel-os').links.some(link => link.href === canonicalUrl));
+    assert(!content.works.find(work => work.id === 'travel-os').links.some(link => link.href === asset.browser_download_url));
+    assert.equal(result.json.downloads[0].downloadUrl, canonicalUrl);
     assert.equal(result.json.downloads[0].status, 'published');
   } finally { globalThis.fetch = originalFetch; }
 });

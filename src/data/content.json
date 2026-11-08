@@ -25,7 +25,12 @@
       ],
       "version": "",
       "technology": [],
-      "links": [],
+      "links": [
+        {
+          "label": "下载 resume-skill-source-2026-11-07.zip",
+          "href": "https://github.com/roldself/rolin-ai-lab/releases/download/resume-skill-v2026.11.08/resume-skill-source-2026-11-07.zip"
+        }
+      ],
       "screenshots": [
         {
           "src": "/media/c71c540b-2996-45e2-b7bb-9f33e89c0a7d.webp",
@@ -64,7 +69,12 @@
         "Python",
         "AKShare"
       ],
-      "links": [],
+      "links": [
+        {
+          "label": "下载 yangjia-trading-agent-source-0.2.zip",
+          "href": "https://github.com/roldself/rolin-ai-lab/releases/download/yangjia-trading-agent-v0.2.0/yangjia-trading-agent-source-0.2.zip"
+        }
+      ],
       "screenshots": [
         {
           "src": "/media/b7ea78c0-f966-420f-8c91-0164ef01ce7f.webp",
@@ -91,7 +101,12 @@
         "章节编纂与书稿导出"
       ],
       "technology": [],
-      "links": [],
+      "links": [
+        {
+          "label": "下载 vita-philosophica-source-2026-11-07.zip",
+          "href": "https://github.com/roldself/rolin-ai-lab/releases/download/vita-philosophica-v2026.11.08/vita-philosophica-source-2026-11-07.zip"
+        }
+      ],
       "screenshots": [
         {
           "src": "/media/b51dfd9e-6ff6-457a-b024-1f5b249cefed.webp",
@@ -125,7 +140,12 @@
         "JavaScript",
         "WorkBuddy"
       ],
-      "links": [],
+      "links": [
+        {
+          "label": "下载 teacher-os-source-2026-11-07.zip",
+          "href": "https://github.com/roldself/rolin-ai-lab/releases/download/teacher-os-v2026.11.08/teacher-os-source-2026-11-07.zip"
+        }
+      ],
       "screenshots": [
         {
           "src": "/media/9c8f8d4c-6a7c-4762-8892-5c27def46a5d.webp",
@@ -156,7 +176,12 @@
         "WorkBuddy",
         "HTML"
       ],
-      "links": [],
+      "links": [
+        {
+          "label": "下载 engineering-document-workbench-skill-1.0.0.zip",
+          "href": "https://github.com/roldself/rolin-ai-lab/releases/download/engineering-document-workbench-v1.0.0/engineering-document-workbench-skill-1.0.0.zip"
+        }
+      ],
       "screenshots": [
         {
           "src": "/media/8aaf0ad2-4093-49ee-b1ab-56eb3fecc061.webp",
@@ -188,7 +213,12 @@
         "HTML",
         "WorkBuddy"
       ],
-      "links": [],
+      "links": [
+        {
+          "label": "下载 tender-workbench-skill-1.0.0.zip",
+          "href": "https://github.com/roldself/rolin-ai-lab/releases/download/tender-workbench-v1.0.0/tender-workbench-skill-1.0.0.zip"
+        }
+      ],
       "screenshots": [
         {
           "src": "/media/090fbde5-3307-49ea-908f-1cbb5b288a2e.webp",
@@ -221,7 +251,12 @@
         "HTML",
         "WorkBuddy"
       ],
-      "links": [],
+      "links": [
+        {
+          "label": "下载 export-sales-workbench-skill-1.0.0.zip",
+          "href": "https://github.com/roldself/rolin-ai-lab/releases/download/export-sales-workbench-v1.0.0/export-sales-workbench-skill-1.0.0.zip"
+        }
+      ],
       "screenshots": [
         {
           "src": "/media/814a3439-b668-40eb-8c53-affab871aa4c.webp",
@@ -251,7 +286,12 @@
         "Python",
         "HTML"
       ],
-      "links": [],
+      "links": [
+        {
+          "label": "下载 knowledge-short-video-workflow-source-1.0.0-prototype.zip",
+          "href": "https://github.com/roldself/rolin-ai-lab/releases/download/knowledge-short-video-workflow-v1.0.0-prototype/knowledge-short-video-workflow-source-1.0.0-prototype.zip"
+        }
+      ],
       "screenshots": [
         {
           "src": "/media/0e660640-e96e-455d-a455-e48f5ffcea70.webp",
